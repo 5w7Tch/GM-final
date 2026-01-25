@@ -5,14 +5,14 @@ Comparing **NCSN** (Noise Conditional Score Network) and **VAE** (Variational Au
 ## Project Structure
 
 ```
-ML2_final/
+GM-final/
 ├── src/
 │   ├── models/
 │   │   ├── ncsn.py      # NCSN & NCSNv2 ✓
-│   │   └── vae.py       # VAE (TODO: Partner)
+│   │   └── vae.py       # VAE (TODO)
 │   ├── losses/
 │   │   ├── score_matching.py  # DSM loss ✓
-│   │   └── vae_loss.py        # ELBO (TODO: Partner)
+│   │   └── vae_loss.py        # ELBO (TODO)
 │   ├── sampling/
 │   │   └── langevin.py  # Annealed Langevin dynamics ✓
 │   ├── data/
@@ -22,7 +22,7 @@ ML2_final/
 │       └── visualization.py  # Sample display ✓
 ├── notebooks/
 │   ├── train_ncsn.ipynb # NCSN training (Colab ready) ✓
-│   └── train_vae.ipynb  # VAE training (TODO: Partner)
+│   └── train_vae.ipynb  # VAE training (TODO)
 ├── requirements.txt
 └── README.md
 ```
@@ -35,13 +35,13 @@ ML2_final/
 
 ## Team Division
 
-### Person 1 (NCSN) - DONE ✓
+### (NCSN) - DONE ✓
 - [x] NCSN model architecture (RefineNet-based)
 - [x] Denoising Score Matching loss
 - [x] Annealed Langevin Dynamics sampling
 - [x] Training notebook
 
-### Person 2 (VAE) - TODO
+### (VAE) - TODO
 - [ ] Implement `src/models/vae.py`:
   - Encoder: Conv layers → (μ, log σ²)
   - Decoder: Deconv layers → x_reconstructed
@@ -51,16 +51,6 @@ ML2_final/
   - KL divergence
 - [ ] Complete `notebooks/train_vae.ipynb`
 
-## Key Formulas
-
-### NCSN
-- **Score**: s_θ(x, σ) ≈ ∇_x log p_σ(x)
-- **DSM Loss**: ||s_θ(x̃) + z/σ||² where x̃ = x + σz
-- **Sampling**: x_{t+1} = x_t + ε·s_θ(x_t) + √(2ε)·z
-
-### VAE
-- **ELBO**: log p(x) ≥ E[log p(x|z)] - KL(q(z|x) || p(z))
-- **Reparameterization**: z = μ + σ ⊙ ε, ε ~ N(0, I)
 
 ## References
 
