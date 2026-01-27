@@ -1,5 +1,5 @@
-# Data
-data/
+# Data (downloaded datasets, not src/data/)
+/data/
 *.tar.gz
 *.zip
 
