@@ -9,7 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torchvision.utils import make_grid, save_image
 
-from ..data import denormalize
+
+def denormalize(x: torch.Tensor) -> torch.Tensor:
+    """Denormalize from [-1, 1] to [0, 1]."""
+    return (x + 1) / 2
 
 
 def show_samples(
