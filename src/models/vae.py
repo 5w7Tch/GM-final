@@ -42,7 +42,7 @@ class Decoder(nn.Module):
         """
     VAE Decoder: z -> x_reconstructed
 
-    """
+        """
     def __init__(self, latent_dim):
         super().__init__()
 
