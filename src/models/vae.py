@@ -38,31 +38,37 @@ class Encoder(nn.Module):
         log_var = self.fc_logvar(h)
         return mu, log_var
 
-
 class Decoder(nn.Module):
-    """
+        """
     VAE Decoder: z -> x_reconstructed
 
     """
-
-    def __init__(self, latent_dim: int = 128, image_channels: int = 3):
+    def __init__(self, latent_dim):
         super().__init__()
-        self.latent_dim = latent_dim
 
         self.fc = nn.Linear(latent_dim, 256 * 4 * 4)
 
-        self.deconv = nn.Sequential(
-            nn.ConvTranspose2d(256, 128, 4, 2, 1),  # 4 -> 8
-            nn.ReLU(True),
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),   # 8 -> 16
-            nn.ReLU(True),
-            nn.ConvTranspose2d(64, image_channels, 4, 2, 1),  # 16 -> 32
+        self.net = nn.Sequential(
+            # 4x4 → 8x8
+            nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2, padding=1),
+            nn.InstanceNorm2d(128),
+            nn.LeakyReLU(0.2, inplace=True),
+
+            # 8x8 → 16x16
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2, padding=1),
+            nn.InstanceNorm2d(64),
+            nn.ReLU(inplace=True),
+
+            # 16x16 → 32x32
+            nn.ConvTranspose2d(64, 3, kernel_size=4, stride=2, padding=1),
             nn.Tanh()
         )
-    def forward(self, z: torch.Tensor) -> torch.Tensor:
-        h = self.fc(z)
-        h = h.view(z.size(0), 256, 4, 4)
-        return self.deconv(h)
+
+    def forward(self, z):
+        x = self.fc(z)
+        x = x.view(z.size(0), 256, 4, 4)
+        return self.net(x)
+
 
 class VAE(nn.Module):
     """
