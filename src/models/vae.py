@@ -69,31 +69,27 @@ class Decoder(nn.Module):
         x = x.view(z.size(0), 256, 4, 4)
         return self.net(x)
 
-
 class VAE(nn.Module):
     """
     Full VAE: Encoder + Reparameterization + Decoder
-
-    """
-
-    def __init__(self, latent_dim: int = 128, image_channels: int = 3):
+ """
+    def __init__(self, latent_dim):
         super().__init__()
+        self.encoder = Encoder(latent_dim)
+        self.decoder = Decoder(latent_dim)
         self.latent_dim = latent_dim
-        self.encoder = Encoder(latent_dim, image_channels)
-        self.decoder = Decoder(latent_dim, image_channels)
 
-    def reparameterize(self, mu: torch.Tensor, log_var: torch.Tensor) -> torch.Tensor:
-        """z = μ + σ * ε, where ε ~ N(0, I)"""
+    def reparameterize(self, mu, log_var):
         std = torch.exp(0.5 * log_var)
         eps = torch.randn_like(std)
         return mu + eps * std
 
-    def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-        """Returns: (x_recon, mu, log_var)"""
+    def forward(self, x):
         mu, log_var = self.encoder(x)
         z = self.reparameterize(mu, log_var)
         x_recon = self.decoder(z)
         return x_recon, mu, log_var
+
 
     @torch.no_grad()
     def sample(self, n_samples: int, device: str = 'cuda') -> torch.Tensor:
