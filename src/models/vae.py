@@ -39,10 +39,10 @@ class Encoder(nn.Module):
         return mu, log_var
 
 class Decoder(nn.Module):
-        """
+    """
     VAE Decoder: z -> x_reconstructed
 
-        """
+    """
     def __init__(self, latent_dim):
         super().__init__()
 
